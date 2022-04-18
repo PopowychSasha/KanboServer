@@ -12,7 +12,7 @@ exports.signup = async (req,res,next)=>{
     .then(()=>{
         const token = jsonWebToken.sign({nickname,email,password},process.env.JWT_PRIVATE_KEY,{expiresIn:'24h'});
         res.cookie('token',token/* ,{httpOnly:true} */);
-        res.status(201).json({user:{nickname,email,password},token});
+        res.status(201).json({user:{nickname,email},token});
     })
     .catch((err)=>{
         console.log(err.message);
@@ -22,6 +22,20 @@ exports.signup = async (req,res,next)=>{
 
 exports.signin = async (req,res,next)=>{
     const{nickname,password} = req.body;
-    
-    res.json({nickname:'Sasha',password:'12345'});
+    const [user] = await User.findAll({
+        where: {
+            nickname: nickname
+        }
+    });
+
+    const isPasswordValid = await bcrypt.compare(password,user.password);
+
+    if(user.length===0 || !isPasswordValid){
+        res.status(403).json({message:'Invalide nickname or password'});
+    }
+    else{
+        const token = jsonWebToken.sign({user:{nickname:user.nickname,email:user.email}},process.env.JWT_PRIVATE_KEY,{expiresIn:'24h'});
+        res.cookie('token',token);
+        res.status(200).json({user:user,token});
+    }
 }
