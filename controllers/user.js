@@ -11,19 +11,21 @@ exports.signup = async (req,res,next)=>{
             nickname: nickname
         }
     });
-
+    console.log('user');
+    console.log(user);
     if(user){
         res.status(409).json({message:'user already exists'});
         return;
     }
-
     User.create({
         nickname,email,password:hashPassword,avatarPublicId
     })
     .then(()=>{
         const token = jsonWebToken.sign({nickname,email,password},process.env.JWT_PRIVATE_KEY,{expiresIn:'24h'});
+        console.log('User is created');
         res.cookie('token',token/* ,{httpOnly:true} */);
-        res.status(201).json({user:{nickname,email},token});
+        res.cookie('nickname',nickname);
+        res.status(201).json({user:{nickname,email,avatarPublicId},token});
     })
     .catch((err)=>{
         console.log(err.message);
@@ -38,15 +40,36 @@ exports.signin = async (req,res,next)=>{
             nickname: nickname
         }
     });
+    if(!user){
+        res.status(403).json({message:'Invalide nickname or password'});
+        return;
+    }
 
     const isPasswordValid = await bcrypt.compare(password,user.password);
 
-    if(user.length===0 || !isPasswordValid){
+    if(!isPasswordValid){
         res.status(403).json({message:'Invalide nickname or password'});
+        return;
     }
     else{
         const token = jsonWebToken.sign({user:{nickname:user.nickname,email:user.email}},process.env.JWT_PRIVATE_KEY,{expiresIn:'24h'});
         res.cookie('token',token);
-        res.status(200).json({user:user,token});
+        res.cookie('nickname',user.nickname);
+        res.status(200).json(user);
     }
+}
+
+exports.getAccount = async (req,res,next)=>{
+    const nicknameFromCookie = req.get('Cookie').split(';')[1].split('=')[1];
+    const [user] = await User.findAll({
+        where:{
+            nickname:nicknameFromCookie
+        }
+    })  
+
+    res.json({
+        nickname:user.nickname,
+        email:user.email,
+        avatarPublicId:user.avatarPublicId
+    });
 }
