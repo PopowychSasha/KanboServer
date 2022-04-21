@@ -1,31 +1,33 @@
-const Sequelize = require("sequelize");
+const {DataTypes} = require("sequelize");
 
-const sequelize = require("../util/database.js");
+const createUsersModel = orm =>{
+  const Users = orm.define("users", {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true,
+    },
+    nickname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    avatarPublicId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+  });
+  return Users;
+}
 
-const User = sequelize.define("user", {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true,
-  },
-  nickname: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  avatarPublicId: {
-    type: Sequelize.STRING,
-    allowNull: true,
-  },
-});
 
-module.exports = User;
+module.exports = createUsersModel;

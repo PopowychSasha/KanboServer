@@ -1,12 +1,13 @@
 const bcrypt = require('bcrypt');
 const jsonWebToken = require('jsonwebtoken');
-const User = require('../models/user.js');
+/* const User = require('../models/user.js'); */
+const {Users} = require('../util/database');
 
 exports.signup = async (req,res,next)=>{
     const{nickname,email,password,avatarPublicId} = req.body;
     const hashPassword = await bcrypt.hash(password,12);
     
-    const [user] = await User.findAll({
+    const [user] = await Users.findAll({
         where: {
             nickname: nickname
         }
@@ -17,7 +18,7 @@ exports.signup = async (req,res,next)=>{
         res.status(409).json({message:'user already exists'});
         return;
     }
-    User.create({
+    Users.create({
         nickname,email,password:hashPassword,avatarPublicId
     })
     .then(()=>{
@@ -35,7 +36,7 @@ exports.signup = async (req,res,next)=>{
 
 exports.signin = async (req,res,next)=>{
     const{nickname,password} = req.body;
-    const [user] = await User.findAll({
+    const [user] = await Users.findAll({
         where: {
             nickname: nickname
         }
@@ -61,7 +62,7 @@ exports.signin = async (req,res,next)=>{
 
 exports.getAccount = async (req,res,next)=>{
     const nicknameFromCookie = req.get('Cookie').split(';')[1].split('=')[1];
-    const [user] = await User.findAll({
+    const [user] = await Users.findAll({
         where:{
             nickname:nicknameFromCookie
         }

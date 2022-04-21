@@ -6,7 +6,7 @@ const userRoutes = require("./routes/user.js");
 
 require("dotenv").config();
 
-const sequelize = require("./util/database.js");
+const {checkConnect} = require("./util/database.js");
 const User = require("./models/user.js");
 
 const app = express();
@@ -19,11 +19,16 @@ app.use(bodyParser.json());
 
 app.use(userRoutes);
 
-sequelize
+app.listen(PORT, () => {
+  console.log(`Server is started on port ${PORT}`);
+  checkConnect();
+});
+
+/* sequelize
   .sync()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server is started on port ${PORT}`);
     });
   })
-  .catch((err) => console.log(err.message));
+  .catch((err) => console.log(err.message)); */
