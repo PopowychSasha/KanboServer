@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/user.js");
+const boardRoutes = require('./routes/board');
 
 require("dotenv").config();
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 app.use(userRoutes);
+app.use(boardRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is started on port ${PORT}`);

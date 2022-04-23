@@ -12,8 +12,8 @@ const createBoardsModel = orm =>{
       type: DataTypes.STRING,
       allowNull: false,
     },
-    date: {
-        type: DataTypes.DATE,
+    type: {
+        type: DataTypes.STRING,
         allowNull: false,
     }
   });

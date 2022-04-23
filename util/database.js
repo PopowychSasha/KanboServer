@@ -29,8 +29,11 @@ const checkConnect = async ()=>{
 const Users = createUsersModel(sequelize);
 const Boards = createBoardsModel(sequelize);
 
-Boards.hasOne(Users,{onDelete:'cascade'});
-Users.belongsTo(Boards);
+/* Boards.hasOne(Users,{onDelete:'cascade'});
+Users.belongsTo(Boards); */
+
+Users.hasMany(Boards,{onDelete:'cascade'});
+Boards.belongsTo(Users);
 
 module.exports = {
   checkConnect,
