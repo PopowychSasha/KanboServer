@@ -12,8 +12,7 @@ exports.signup = async (req,res,next)=>{
             nickname: nickname
         }
     });
-    console.log('user');
-    console.log(user);
+
     if(user){
         res.status(409).json({message:'user already exists'});
         return;
@@ -23,9 +22,7 @@ exports.signup = async (req,res,next)=>{
     })
     .then(()=>{
         const token = jsonWebToken.sign({nickname,email,password},process.env.JWT_PRIVATE_KEY,{expiresIn:'24h'});
-        console.log('User is created');
-        res.cookie('token',token/* ,{httpOnly:true} */);
-        res.cookie('nickname',nickname);
+        res.cookie('nickname%token',`${nickname}%${token}`/* ,{httpOnly:true} */);
         res.status(201).json({user:{nickname,email,avatarPublicId},token});
     })
     .catch((err)=>{
@@ -41,6 +38,7 @@ exports.signin = async (req,res,next)=>{
             nickname: nickname
         }
     });
+
     if(!user){
         res.status(403).json({message:'Invalide nickname or password'});
         return;
@@ -54,23 +52,27 @@ exports.signin = async (req,res,next)=>{
     }
     else{
         const token = jsonWebToken.sign({user:{nickname:user.nickname,email:user.email}},process.env.JWT_PRIVATE_KEY,{expiresIn:'24h'});
-        res.cookie('token',token);
-        res.cookie('nickname',user.nickname);
+        res.cookie('nickname%token',`${user.nickname}%${token}`/* ,{httpOnly:true} */);
         res.status(200).json(user);
     }
 }
 
 exports.getAccount = async (req,res,next)=>{
-    const nicknameFromCookie = req.get('Cookie').split(';')[1].split('=')[1];
+    const nicknameFromCookie = req.get('Cookie').split('=')[1].split('%')[0];
+
     const [user] = await Users.findAll({
         where:{
             nickname:nicknameFromCookie
         }
-    })  
-
+    })
     res.json({
         nickname:user.nickname,
         email:user.email,
         avatarPublicId:user.avatarPublicId
     });
+}
+
+exports.logout = async (req,res,next)=>{
+    res.clearCookie("nickname%token");
+    res.status(200).json({message:'Cookies are deleted'});
 }

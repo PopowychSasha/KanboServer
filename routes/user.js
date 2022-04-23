@@ -5,5 +5,6 @@ const userControllers = require("../controllers/user.js");
 routes.post("/api/auth/signup", userControllers.signup);
 routes.post("/api/auth/signin", userControllers.signin);
 routes.get("/api/account", userControllers.getAccount);
+routes.get("/api/logout", userControllers.logout);
 
 module.exports = routes;
