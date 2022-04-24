@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const createUsersModel = require('../models/user');
 const createBoardsModel  = require('../models/board');
+const createTasksModel  = require('../models/task');
 
 const sequelize = new Sequelize("kanbo", "root", "mainAdmin1", {
   dialect: "mysql",
@@ -28,15 +29,19 @@ const checkConnect = async ()=>{
 
 const Users = createUsersModel(sequelize);
 const Boards = createBoardsModel(sequelize);
-
+const Tasks = createTasksModel(sequelize);
 /* Boards.hasOne(Users,{onDelete:'cascade'});
 Users.belongsTo(Boards); */
 
 Users.hasMany(Boards,{onDelete:'cascade'});
 Boards.belongsTo(Users);
 
+Boards.hasMany(Tasks,{onDelete:'cascade'});
+Tasks.belongsTo(Boards);
+
 module.exports = {
   checkConnect,
   Users,
-  Boards
+  Boards,
+  Tasks
 };
