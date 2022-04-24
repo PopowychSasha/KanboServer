@@ -8,6 +8,13 @@ exports.createTask = (req,res,next)=>{
         name:taskName,
         status:'UnDone',
         boardId:boardId
-    });
-    res.status('200').json({message:'Task is created!'});
+    })
+    .then(task=>{
+        res.status(201).json(task.dataValues);
+        console.log(task)
+    })
+    .catch((err)=>{
+        res.status(209).json({message:'task not created'});
+        console.log(err.message)
+    })
 }
