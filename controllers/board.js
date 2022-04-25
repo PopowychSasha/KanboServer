@@ -48,3 +48,16 @@ exports.getBoards = async (req,res,next)=>{
 
     res.json(boardsResponce);
 }
+
+exports.deleteBoard = (req,res,next)=>{
+    const {boardId} = req.body;
+    console.log(`del boardId=${boardId}`);
+    Boards.destroy({
+        where:{
+            id:boardId
+        }
+    })
+    
+
+    res.status(200).json({message:'Board delete successful!!!'});
+}
