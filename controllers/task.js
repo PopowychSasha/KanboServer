@@ -18,3 +18,43 @@ exports.createTask = (req,res,next)=>{
         console.log(err.message)
     })
 }
+
+exports.setNewTaskStatus = (req,res,next)=>{
+    const{id,status} = req.body;
+    console.log('api/task/status');
+    console.log(`id=${id}`);
+    console.log(`dtatus===${status}`);
+    console.log(status);
+    console.log(`${status[0]}==='U'`);
+
+    Tasks.update(
+        { status: status},
+        { where: { id: id } }
+      )
+      .then(task=>{
+          console.log('task');
+          console.log(task);
+          res.status(200).json({message:'Task update success'});
+      })
+      .catch(err=>{
+        console.log('Update failed');
+          res.json({message:'task not update'});
+      })
+}
+
+exports.getTasksForBoard = (req,res,next)=>{
+    const {boardId} = req.body;
+    console.log(`boardId=${boardId}`);
+    Tasks.findAll({
+        where:{
+            boardId:boardId
+        }
+    })
+      .then(tasks=>{
+          res.status(200).json(tasks);
+      })
+      .catch(err=>{
+          console.log(err.message);
+          res.json({message:'task not faund'});
+      })
+}
