@@ -1,14 +1,13 @@
 const {TaskDetails} = require('../util/database');
 exports.getTaskDetails = async (req,res,next)=>{
-    const{taskId} = req.body;
+    const taskId  = req.params.id;
+
     const [taskDetails] = await TaskDetails.findAll({
         where: {
           taskId: taskId,
         },
     });
-    console.log('taskDetails');
     
-    console.log(taskDetails);
     res.json({details:taskDetails.dataValues.details});
 }
 exports.createTaskDetails =async (req,res,next)=>{

@@ -53,7 +53,8 @@ exports.getBoards = async (req, res, next) => {
 };
 
 exports.deleteBoard = (req, res, next) => {
-  const { boardId } = req.body;
+  const boardId  = req.params.id;
+  
   try{
       Boards.destroy({
         where: {

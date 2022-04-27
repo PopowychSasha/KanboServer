@@ -5,6 +5,6 @@ const checkAuthMiddleware = require('../middleware/check-auth');
 
 routes.post('/api/board',checkAuthMiddleware.checkAuth,boardControllers.createBoard);
 routes.get('/api/boards',boardControllers.getBoards);
-routes.post('/api/board/delete',boardControllers.deleteBoard);
+routes.delete('/api/delete/board/:id',boardControllers.deleteBoard);
 
 module.exports = routes;

@@ -12,7 +12,7 @@ const createTasksModel = orm =>{
       type: DataTypes.STRING,
       allowNull: false,
     },
-    status: {
+    status:{
         type: DataTypes.STRING,
         allowNull: false,
     }

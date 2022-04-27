@@ -4,6 +4,7 @@ const routes = express.Router();
 
 routes.post('/api/task',taskControllers.createTask);
 routes.post('/api/task/status',taskControllers.setNewTaskStatus);
-routes.post('/api/tasks/board',taskControllers.getTasksForBoard);
+routes.get('/api/tasks/board/:id',taskControllers.getTasksForBoard);
+routes.post('/api/task/edit',taskControllers.editTask);
 
 module.exports = routes;

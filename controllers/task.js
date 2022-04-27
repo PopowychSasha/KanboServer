@@ -33,7 +33,7 @@ exports.setNewTaskStatus = (req,res,next)=>{
 }
 
 exports.getTasksForBoard = (req,res,next)=>{
-    const {boardId} = req.body;
+    const boardId = req.params.id;
 
     Tasks.findAll({
         where:{
@@ -46,5 +46,21 @@ exports.getTasksForBoard = (req,res,next)=>{
       .catch(err=>{
           console.log(err.message);
           res.json({message:err.message});
+      })
+}
+
+exports.editTask = (req,res,next)=>{
+    const {taskId,editTask} = req.body;
+    
+    Tasks.update(
+        { name: editTask},
+        { where: { id: taskId } }
+      )
+      .then(()=>{
+          res.status(200).json({editTask:editTask});
+      })
+      .catch(err=>{
+          console.log(err.message);
+          res.status(500).json({message:err.message});
       })
 }
