@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/user.js");
 const boardRoutes = require('./routes/board');
 const taskRoutes = require('./routes/task');
+const taskDetailRoutes = require('./routes/taskDetail');
 
 require("dotenv").config();
 
@@ -22,17 +23,9 @@ app.use(bodyParser.json());
 app.use(userRoutes);
 app.use(boardRoutes);
 app.use(taskRoutes);
+app.use(taskDetailRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is started on port ${PORT}`);
   checkConnect();
 });
-
-/* sequelize
-  .sync()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is started on port ${PORT}`);
-    });
-  })
-  .catch((err) => console.log(err.message)); */

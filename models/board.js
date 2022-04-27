@@ -20,5 +20,4 @@ const createBoardsModel = orm =>{
   return Boards;
 }
 
-
 module.exports = createBoardsModel;

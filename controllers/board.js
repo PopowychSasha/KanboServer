@@ -1,63 +1,68 @@
-const {Users} = require('../util/database');
-const {Boards} = require('../util/database');
+const { Users } = require("../util/database");
+const { Boards } = require("../util/database");
 
-exports.createBoard = async (req,res,next)=>{
-    const nicknameFromCookie = req.get('Cookie').split('=')[1].split('%')[0];
-    const {name,type} = req.body;
+exports.createBoard = async (req, res, next) => {
+  const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
+  const { name, type } = req.body;
 
-    const [user] = await Users.findAll({
-        where:{
-            nickname:nicknameFromCookie
-        }
+  const [user] = await Users.findAll({
+    where: {
+      nickname: nicknameFromCookie,
+    },
+  });
+
+  Boards.create({
+    name: name,
+    type: type,
+    userId: user.id,
+  })
+    .then((board) => {
+      res.json(board);
     })
-
-    Boards.create({
-        name:name,
-        type:type,
-        userId:user.id
-    })
-    .then((board)=>{
-        console.log('Board create success');
-        res.json(board);
-    })
-    .catch((err)=>console.log(err.message))
-}
-
-exports.getBoards = async (req,res,next)=>{
-    const nicknameFromCookie = req.get('Cookie').split('=')[1].split('%')[0];
-
-    const [user] = await Users.findAll({
-        where:{
-            nickname:nicknameFromCookie
-        }
-    })
-
-    const boards = await Boards.findAll({
-        where:{
-            userId:user.id
-        }
+    .catch((err) => {
+      console.log(err.message);
+      res.status(500).json({ message: err.message });
     });
-    const boardsResponce = boards.map(item=>{
-        return {
-            id:item.dataValues.id,
-            name:item.dataValues.name,
-            type:item.dataValues.type,
-            createdAt:item.dataValues.createdAt,
-        }
-    })
+};
 
-    res.json(boardsResponce);
-}
+exports.getBoards = async (req, res, next) => {
+  const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
+  console.log(req);
+  const [user] = await Users.findAll({
+    where: {
+      nickname: nicknameFromCookie,
+    },
+  });
 
-exports.deleteBoard = (req,res,next)=>{
-    const {boardId} = req.body;
-    console.log(`del boardId=${boardId}`);
-    Boards.destroy({
-        where:{
-            id:boardId
-        }
-    })
-    
+  const boards = await Boards.findAll({
+    where: {
+      userId: user.id,
+    },
+  });
 
-    res.status(200).json({message:'Board delete successful!!!'});
-}
+  const boardsResponce = boards.map((item) => {
+    return {
+      id: item.dataValues.id,
+      name: item.dataValues.name,
+      type: item.dataValues.type,
+      createdAt: item.dataValues.createdAt,
+    };
+  });
+
+  res.status(200).json(boardsResponce);
+};
+
+exports.deleteBoard = (req, res, next) => {
+  const { boardId } = req.body;
+  try{
+      Boards.destroy({
+        where: {
+          id: boardId,
+        },
+      });
+      res.status(200).json({ message: "Board delete successful" });
+  }
+  catch(err){
+      res.status(500).json({ message: err.message });
+  }
+};

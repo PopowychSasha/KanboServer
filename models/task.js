@@ -20,5 +20,4 @@ const createTasksModel = orm =>{
   return Tasks;
 }
 
-
 module.exports = createTasksModel;
