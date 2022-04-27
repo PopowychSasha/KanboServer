@@ -8,7 +8,7 @@ const createBoardsModel = orm =>{
       allowNull: false,
       primaryKey: true,
     },
-    name: {
+    name:{
       type: DataTypes.STRING,
       allowNull: false,
     },

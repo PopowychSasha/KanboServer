@@ -63,6 +63,7 @@ exports.signin = async (req, res, next) => {
       process.env.JWT_PRIVATE_KEY,
       { expiresIn: "24h" }
     );
+    console.log(`signInToken=${token}`);
     res.cookie(
       "nickname%token",
       `${user.nickname}%${token}` /* ,{httpOnly:true} */
@@ -72,7 +73,7 @@ exports.signin = async (req, res, next) => {
 };
 
 exports.getAccount = async (req, res, next) => {
-  const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
+  const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%25")[0];
 
   const [user] = await Users.findAll({
     where: {

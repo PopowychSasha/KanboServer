@@ -6,7 +6,9 @@ exports.getTaskDetails = async (req,res,next)=>{
           taskId: taskId,
         },
     });
-    console.log(taskDetails.dataValues.details);
+    console.log('taskDetails');
+    
+    console.log(taskDetails);
     res.json({details:taskDetails.dataValues.details});
 }
 exports.createTaskDetails =async (req,res,next)=>{

@@ -2,7 +2,7 @@ const { Users } = require("../util/database");
 const { Boards } = require("../util/database");
 
 exports.createBoard = async (req, res, next) => {
-  const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
+  const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%25")[0];
   const { name, type } = req.body;
 
   const [user] = await Users.findAll({
@@ -27,7 +27,7 @@ exports.createBoard = async (req, res, next) => {
 
 exports.getBoards = async (req, res, next) => {
   const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
-  console.log(req);
+  
   const [user] = await Users.findAll({
     where: {
       nickname: nicknameFromCookie,
