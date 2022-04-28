@@ -67,3 +67,17 @@ exports.deleteBoard = (req, res, next) => {
       res.status(500).json({ message: err.message });
   }
 };
+
+exports.getBoardName =async (req, res, next) => {
+  const boardId  = req.params.id;
+
+   const [board] = await Boards.findAll({
+      where: {
+        id: boardId,
+      },
+    })
+    console.log('boardName');
+    console.log(board);
+    res.status(200).json({name:board.dataValues.name})
+
+};

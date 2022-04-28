@@ -25,7 +25,6 @@ exports.createTaskDetails =async (req,res,next)=>{
             taskId:taskId
         })
         .then(details=>{
-            console.log('Створено успішно');
             res.status(201).json(details.dataValues);
         })
         .catch(err=>res.json({message:err.message}))
