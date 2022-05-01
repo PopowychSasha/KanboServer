@@ -64,3 +64,20 @@ exports.editTask = (req,res,next)=>{
           res.status(500).json({message:err.message});
       })
 }
+
+exports.getTask = (req,res,next)=>{
+    const taskId = req.params.id;
+    
+    Tasks.findAll({
+        where:{
+            id:taskId
+        }
+    })
+      .then(task=>{
+          res.status(200).json(task);
+      })
+      .catch(err=>{
+          console.log(err.message);
+          res.json({message:err.message});
+      })
+}

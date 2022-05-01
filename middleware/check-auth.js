@@ -9,7 +9,9 @@ exports.checkAuth = (req,res,next)=>{
     }
     try{
         const isTokinValide = jwt.verify(token,'fg56!*&hu@');
-        console.log(`isTokinValide=${isTokinValide}`);
+        console.log(`isTokinValide=`);
+        //console.log(isTokinValide);
+        console.log(jwt.decode(token));
         next();
     }catch(err){
         console.log('AnAuthError(');

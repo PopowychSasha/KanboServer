@@ -24,7 +24,7 @@ exports.signup = async (req, res, next) => {
   })
     .then(() => {
       const token = jsonWebToken.sign(
-        { nickname, email, password },
+        { nickname, email},
         process.env.JWT_PRIVATE_KEY,
         { expiresIn: "24h" }
       );
@@ -59,7 +59,7 @@ exports.signin = async (req, res, next) => {
     return;
   } else {
     const token = jsonWebToken.sign(
-      { user: { nickname: user.nickname, email: user.email } },
+      { nickname: user.nickname, email: user.email },
       process.env.JWT_PRIVATE_KEY,
       { expiresIn: "24h" }
     );
