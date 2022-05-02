@@ -81,3 +81,22 @@ exports.getTask = (req,res,next)=>{
           res.json({message:err.message});
       })
 }
+
+exports.deleteTask = (req,res,next)=>{
+    const taskId = req.params.id;
+
+    console.log(`iidd=${taskId}`);
+    console.log(req.params);
+    
+    try{
+        Tasks.destroy({
+          where: {
+            id: taskId,
+          },
+        });
+        res.status(200).json({ message: "Task delete successful" });
+    }
+    catch(err){
+        res.status(500).json({ message: err.message });
+    }
+}

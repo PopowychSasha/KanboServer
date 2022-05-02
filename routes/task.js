@@ -8,5 +8,6 @@ routes.post('/api/task/status',checkAuthMiddleware.checkAuth,taskControllers.set
 routes.get('/api/tasks/board/:id',checkAuthMiddleware.checkAuth,taskControllers.getTasksForBoard);
 routes.post('/api/task/edit',checkAuthMiddleware.checkAuth,taskControllers.editTask);
 routes.get('/api/task/:id',checkAuthMiddleware.checkAuth,taskControllers.getTask);
+routes.delete('/api/task/:id',checkAuthMiddleware.checkAuth,taskControllers.deleteTask);
 
 module.exports = routes;

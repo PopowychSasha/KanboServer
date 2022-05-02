@@ -63,7 +63,7 @@ exports.signin = async (req, res, next) => {
       process.env.JWT_PRIVATE_KEY,
       { expiresIn: "24h" }
     );
-    console.log(`signInToken=${token}`);
+    
     res.cookie(
       "nickname%token",
       `${user.nickname}%${token}` /* ,{httpOnly:true} */

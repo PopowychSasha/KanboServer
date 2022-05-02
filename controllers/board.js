@@ -76,8 +76,7 @@ exports.getBoardName =async (req, res, next) => {
         id: boardId,
       },
     })
-    console.log('boardName');
-    console.log(board);
+    
     res.status(200).json({name:board.dataValues.name})
 
 };
