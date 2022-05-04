@@ -82,6 +82,7 @@ exports.getAccount = async (req, res, next) => {
   });
   
   res.json({
+    id:user.id,
     nickname: user.nickname,
     email: user.email,
     avatarPublicId: user.avatarPublicId,
@@ -92,3 +93,57 @@ exports.logout = async (req, res, next) => {
   res.clearCookie("nickname%token");
   res.status(200).json({ message: "Cookies are deleted" });
 };
+
+exports.changeAccountData = (req, res, next) => {
+  const{id,nickname,email,avatarPublicId} = req.body;
+
+  console.log(`${id} ${nickname} ${email} ${avatarPublicId}`);
+  Users.update(
+    { nickname: nickname},
+    { where: { id: Number(id) } }
+  )
+  .then(()=>{
+      res.status(200).json({message:'Task update success'});
+  })
+  .catch(err=>{
+      console.log(err.message);
+      res.status(500).json({message:err.message});
+  })
+
+  Users.update(
+    { email:email},
+    { where: { id: Number(id) } }
+  )
+  .then(()=>{
+      res.status(200).json({message:'Task update success'});
+  })
+  .catch(err=>{
+      console.log(err.message);
+      res.status(500).json({message:err.message});
+  })
+
+  Users.update(
+    { avatarPublicId:avatarPublicId},
+    { where: { id: Number(id) } }
+  )
+  .then(()=>{
+      res.status(200).json({message:'Task update success'});
+  })
+  .catch(err=>{
+      console.log(err.message);
+      res.status(500).json({message:err.message});
+  })
+
+  const token = jsonWebToken.sign(
+    { nickname: user.nickname, email: user.email },
+    process.env.JWT_PRIVATE_KEY,
+    { expiresIn: "24h" }
+  );
+  
+  res.cookie(
+    "nickname%token",
+    `${'nickname'}%${'token'}` /* ,{httpOnly:true} */
+  );
+  res.status(200).json({message:'Data is changed!!!'});
+};
+

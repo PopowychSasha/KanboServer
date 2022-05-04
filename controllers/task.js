@@ -85,9 +85,6 @@ exports.getTask = (req,res,next)=>{
 exports.deleteTask = (req,res,next)=>{
     const taskId = req.params.id;
 
-    console.log(`iidd=${taskId}`);
-    console.log(req.params);
-    
     try{
         Tasks.destroy({
           where: {
@@ -100,3 +97,25 @@ exports.deleteTask = (req,res,next)=>{
         res.status(500).json({ message: err.message });
     }
 }
+
+exports.setTaskDeadline = (req,res,next)=>{
+    const {taskId,deadline} = req.body;
+
+    console.log(taskId);
+    console.log(deadline);
+
+    Tasks.update(
+        { deadLine: deadline},
+        { where: { id: taskId } }
+      )
+      .then(()=>{
+          res.status(200).json({editTask:editTask});
+      })
+      .catch(err=>{
+          console.log(err.message);
+          res.status(500).json({message:err.message});
+      })
+
+    res.json({message:'Ok!!!'});
+}
+

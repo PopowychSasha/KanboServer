@@ -9,5 +9,6 @@ routes.get('/api/tasks/board/:id',checkAuthMiddleware.checkAuth,taskControllers.
 routes.post('/api/task/edit',checkAuthMiddleware.checkAuth,taskControllers.editTask);
 routes.get('/api/task/:id',checkAuthMiddleware.checkAuth,taskControllers.getTask);
 routes.delete('/api/task/:id',checkAuthMiddleware.checkAuth,taskControllers.deleteTask);
+routes.post('/api/task/deadline',checkAuthMiddleware.checkAuth,taskControllers.setTaskDeadline);
 
 module.exports = routes;

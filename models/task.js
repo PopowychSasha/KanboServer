@@ -12,6 +12,10 @@ const createTasksModel = orm =>{
       type: DataTypes.STRING,
       allowNull: false,
     },
+    deadLine:{
+      type:DataTypes.DATE,
+      allowNull:true
+    },
     status:{
         type: DataTypes.STRING,
         allowNull: false,

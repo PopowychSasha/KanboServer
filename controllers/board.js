@@ -70,13 +70,30 @@ exports.deleteBoard = (req, res, next) => {
 
 exports.getBoardName =async (req, res, next) => {
   const boardId  = req.params.id;
+  const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
 
-   const [board] = await Boards.findAll({
+  const [board] = await Boards.findAll({
       where: {
         id: boardId,
       },
-    })
-    
-    res.status(200).json({name:board.dataValues.name})
+  });
 
+  const [user] = await Users.findAll({
+    where: {
+      nickname: nicknameFromCookie,
+    },
+  });
+
+  if(board===undefined){
+    res.status(403).json({message:'Access deny'});
+    return;
+  }
+  else if(user.id!==board.userId){
+    res.status(403).json({message:'Access deny'});
+    return;
+  }
+  else if(user.id===board.userId){
+    res.status(200).json({name:board.dataValues.name});
+    return;
+  }
 };

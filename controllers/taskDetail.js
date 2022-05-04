@@ -1,4 +1,4 @@
-const {TaskDetails} = require('../util/database');
+const {TaskDetails,Tasks,Boards,Users} = require('../util/database');
 exports.getTaskDetails = async (req,res,next)=>{
     const taskId  = req.params.id;
 
@@ -7,8 +7,49 @@ exports.getTaskDetails = async (req,res,next)=>{
           taskId: taskId,
         },
     });
+
+    const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
+
+    const [task] = await Tasks.findAll({
+        where: {
+          id: taskId,
+        },
+      });
+
+      if(!task){
+        res.status(403).json({message:'TaskDetailsDeny'})
+      }
+
+
+      const [board] = await Boards.findAll({
+        where: {
+          id: task.dataValues.boardId,
+        },
+    });
+
+    const [user] = await Users.findAll({
+        where: {
+          nickname: nicknameFromCookie,
+        },
+      });
     
-    res.json({details:taskDetails.dataValues.details});
+    if(board===undefined){
+        console.log(111);
+        res.status(403).json({message:'Access deny'});
+        return;
+      }
+      else if(user.id!==board.userId){
+        console.log(222);
+        res.status(403).json({message:'Access deny'});
+        return;
+      }
+      else if(user.id===board.userId){
+        console.log(333);
+        res.json({details:taskDetails.dataValues.details});
+        return;
+      } 
+
+    
 }
 exports.createTaskDetails =async (req,res,next)=>{
     const {taskId,details} = req.body;
