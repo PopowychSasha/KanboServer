@@ -11,10 +11,6 @@ const createBoardsModel = orm =>{
     name:{
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    type: {
-        type: DataTypes.STRING,
-        allowNull: false,
     }
   });
   return Boards;
