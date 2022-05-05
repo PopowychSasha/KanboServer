@@ -34,17 +34,14 @@ exports.getTaskDetails = async (req,res,next)=>{
       });
     
     if(board===undefined){
-        console.log(111);
         res.status(403).json({message:'Access deny'});
         return;
       }
       else if(user.id!==board.userId){
-        console.log(222);
         res.status(403).json({message:'Access deny'});
         return;
       }
       else if(user.id===board.userId){
-        console.log(333);
         res.json({details:taskDetails.dataValues.details});
         return;
       } 

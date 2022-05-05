@@ -101,9 +101,6 @@ exports.deleteTask = (req,res,next)=>{
 exports.setTaskDeadline = (req,res,next)=>{
     const {taskId,deadline} = req.body;
 
-    console.log(taskId);
-    console.log(deadline);
-
     Tasks.update(
         { deadLine: deadline},
         { where: { id: taskId } }
