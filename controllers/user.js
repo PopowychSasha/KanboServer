@@ -102,8 +102,7 @@ exports.changeAccountData = async (req, res, next) => {
       id:id
     }
   })
-  console.log('userIII');
-  console.log(user);
+  
   const isPasswordValid = await bcrypt.compare(oldPassword, user.dataValues.password);
   const hashPassword = await bcrypt.hash(newPassword, 12);
   if (!isPasswordValid) {

@@ -17,7 +17,7 @@ exports.createBoard = async (req, res, next) => {
     userId: user.id,
   })
     .then((board) => {
-      res.json(board);
+      res.status(200).json(board);
     })
     .catch((err) => {
       console.log(err.message);
