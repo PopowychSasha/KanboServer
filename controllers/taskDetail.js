@@ -1,7 +1,8 @@
 const {TaskDetails,Tasks,Boards,Users} = require('../util/database');
 exports.getTaskDetails = async (req,res,next)=>{
+    console.log('This is getTaskDetails');
     const taskId  = req.params.id;
-
+    console.log(`taskIdzzz=${taskId}`);
     const [taskDetails] = await TaskDetails.findAll({
         where: {
           taskId: taskId,
@@ -9,7 +10,7 @@ exports.getTaskDetails = async (req,res,next)=>{
     });
 
     const nicknameFromCookie = req.get("Cookie").split("=")[1].split("%")[0];
-
+    console.log(`nicknameFromCookie=${nicknameFromCookie}`);
     const [task] = await Tasks.findAll({
         where: {
           id: taskId,
@@ -32,18 +33,26 @@ exports.getTaskDetails = async (req,res,next)=>{
           nickname: nicknameFromCookie,
         },
       });
-    
+
+      console.log(taskDetails);
     if(board===undefined){
+        console.log(111111111111111111);
         res.status(403).json({message:'Access deny'});
         return;
       }
       else if(user.id!==board.userId){
+        console.log(222222222222222222);
         res.status(403).json({message:'Access deny'});
         return;
       }
       else if(user.id===board.userId){
-        res.json({details:taskDetails.dataValues.details});
-        return;
+        if(!taskDetails){
+          res.json({details:{}});
+        }
+        else{
+          res.json({details: taskDetails.dataValues.details});
+          return;
+        }
       } 
 
     
